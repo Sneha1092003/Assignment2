@@ -1,6 +1,7 @@
 #ifndef LCD_H
 #define LCD_H
 
+<<<<<<< HEAD
 #include "driver/gpio.h"
 
 // Adjust these GPIO numbers according to your wiring
@@ -19,3 +20,9 @@ void lcd_send_string(const char *str);
 void lcd_set_cursor(uint8_t row, uint8_t col);
 
 #endif
+=======
+void lcd_init(void);
+void lcd_print(const char *message);
+
+#endif 
+>>>>>>> cf23f5418b3c4a1333c2f6ac7956db43f020d348

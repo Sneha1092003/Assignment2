@@ -18,8 +18,16 @@ end
 
 # Load bootloader symbols
 set confirm off
+<<<<<<< HEAD
     add-symbol-file C:/Users/S.SNEHA/OneDrive/SNEHA-emblock/lcd_project/build/bootloader/bootloader.elf
 set confirm on
 
 # Load application symbols
 file C:/Users/S.SNEHA/OneDrive/SNEHA-emblock/lcd_project/build/LCD_PROJECT.elf
+=======
+    add-symbol-file C:/Users/S.SNEHA/SNEHA-emblock/lcd_project/build/bootloader/bootloader.elf
+set confirm on
+
+# Load application symbols
+file C:/Users/S.SNEHA/SNEHA-emblock/lcd_project/build/lcd_project.elf
+>>>>>>> cf23f5418b3c4a1333c2f6ac7956db43f020d348
