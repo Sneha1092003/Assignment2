@@ -1,3 +1,8 @@
 {
-    "idf.portWin": "COM6"
-}
+    "idf.espIdfPath": "C:/esp/esp-idf",
+    "idf.toolsPath": "C:/Users/S.SNEHA/.espressif",
+    "idf.pythonBinPath": "C:/Users/S.SNEHA/.espressif/python_env/idf5.1_py3.11_env/Scripts/python.exe",
+    "C_Cpp.default.configurationProvider": "ms-vscode.cpptools",
+    "C_Cpp.intelliSenseEngine": "Default"
+  }
+  

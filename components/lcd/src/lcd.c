@@ -1,74 +1,95 @@
-#include "lcd.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
+#include "driver/gpio.h"
 
-static lcd_config_t lcd_cfg;
+// Define LCD control pins
+#define LCD_RS     GPIO_NUM_21
+#define LCD_EN     GPIO_NUM_22
+#define LCD_D4     GPIO_NUM_15
+#define LCD_D5     GPIO_NUM_23
+#define LCD_D6     GPIO_NUM_18
+#define LCD_D7     GPIO_NUM_19
 
-static void lcd_enable_pulse() {
-    gpio_set_level(lcd_cfg.en_pin, 1);
-    ets_delay_us(1);
-    gpio_set_level(lcd_cfg.en_pin, 0);
-    ets_delay_us(100);
+//LCD_RS GPIO_NUM_21
+//LCD_EN GPIO_NUM_22
+//LCD_D4 GPIO_NUM_15
+//LCD_D5 GPIO_NUM_23
+//LCD_D6 GPIO_NUM_18
+//LCD_D7 GPIO_NUM_19
+
+// Short delay function (using FreeRTOS vTaskDelay)
+void lcd_delay_ms(int ms) {
+    vTaskDelay(pdMS_TO_TICKS(ms));  // Convert milliseconds to FreeRTOS ticks
 }
 
-static void lcd_send_nibble(uint8_t nibble) {
-    for (int i = 0; i < 4; i++) {
-        gpio_set_level(lcd_cfg.data_pins[i], (nibble >> i) & 0x01);
+// Send a 4-bit nibble to LCD
+void lcd_send_nibble(uint8_t nibble) {
+    gpio_set_level(LCD_D4, (nibble >> 0) & 0x01);
+    gpio_set_level(LCD_D5, (nibble >> 1) & 0x01);
+    gpio_set_level(LCD_D6, (nibble >> 2) & 0x01);
+    gpio_set_level(LCD_D7, (nibble >> 3) & 0x01);
+
+    // Pulse EN pin to send data
+    gpio_set_level(LCD_EN, 1);  // Set EN high
+    lcd_delay_ms(1);  // Wait for a short time
+    gpio_set_level(LCD_EN, 0);  // Set EN low
+    lcd_delay_ms(1);  // Wait for a short time
+}
+
+// Send a full byte (2 nibbles) to LCD
+void lcd_send_byte(uint8_t byte, bool is_data) {
+    gpio_set_level(LCD_RS, is_data);  // RS = 0 for command, RS = 1 for data
+
+    lcd_send_nibble(byte >> 4);  // Send the high nibble
+    lcd_send_nibble(byte & 0x0F);  // Send the low nibble
+
+    lcd_delay_ms(10);  // Wait for the LCD to process
+}
+
+// Initialize LCD
+void lcd_init() {
+    // Set GPIO pins as output
+    gpio_set_direction(LCD_RS, GPIO_MODE_OUTPUT);
+    gpio_set_direction(LCD_EN, GPIO_MODE_OUTPUT);
+    gpio_set_direction(LCD_D4, GPIO_MODE_OUTPUT);
+    gpio_set_direction(LCD_D5, GPIO_MODE_OUTPUT);
+    gpio_set_direction(LCD_D6, GPIO_MODE_OUTPUT);
+    gpio_set_direction(LCD_D7, GPIO_MODE_OUTPUT);
+
+    lcd_delay_ms(20);  // Wait for power to stabilize
+
+    // LCD initialization sequence
+    lcd_send_nibble(0x03);  // Function set
+    lcd_delay_ms(10);
+    lcd_send_nibble(0x03);  // Function set
+    lcd_delay_ms(10);
+    lcd_send_nibble(0x03);  // Function set
+    lcd_delay_ms(10);
+    lcd_send_nibble(0x02);  // Set 4-bit mode
+
+    // Set 4-bit mode, 2-line display, 5x8 dots
+    lcd_send_byte(0x28, false);
+    // Turn on display, cursor off, blink off
+    lcd_send_byte(0x0C, false);
+    // Clear display
+    lcd_send_byte(0x01, false);
+    lcd_delay_ms(5);
+    // Set entry mode (increment cursor, no shift)
+    lcd_send_byte(0x06, false);
+}
+
+// Write a single character to LCD
+void lcd_write_char(char c) {
+    lcd_send_byte(c, true);
+}
+
+// Write a string to the LCD
+void lcd_write_string(const char* str) {
+    while (*str) {
+        lcd_write_char(*str++);
     }
-    lcd_enable_pulse();
 }
 
-static void lcd_send_cmd(uint8_t cmd) {
-    gpio_set_level(lcd_cfg.rs_pin, 0);
-    lcd_send_nibble(cmd >> 4);
-    lcd_send_nibble(cmd & 0x0F);
-    vTaskDelay(pdMS_TO_TICKS(2));
-}
-
-static void lcd_send_data(uint8_t data) {
-    gpio_set_level(lcd_cfg.rs_pin, 1);
-    lcd_send_nibble(data >> 4);
-    lcd_send_nibble(data & 0x0F);
-    vTaskDelay(pdMS_TO_TICKS(2));
-}
-
-void lcd_init(lcd_config_t* config) {
-    lcd_cfg = *config;
-    gpio_set_direction(lcd_cfg.rs_pin, GPIO_MODE_OUTPUT);
-    gpio_set_direction(lcd_cfg.en_pin, GPIO_MODE_OUTPUT);
-    for (int i = 0; i < 4; i++) {
-        gpio_set_direction(lcd_cfg.data_pins[i], GPIO_MODE_OUTPUT);
-    }
-
-    vTaskDelay(pdMS_TO_TICKS(50));
-    lcd_send_nibble(0x03); vTaskDelay(pdMS_TO_TICKS(5));
-    lcd_send_nibble(0x03); vTaskDelay(pdMS_TO_TICKS(5));
-    lcd_send_nibble(0x03); vTaskDelay(pdMS_TO_TICKS(1));
-    lcd_send_nibble(0x02);
-
-    lcd_send_cmd(0x28); 
-    lcd_send_cmd(0x0C); 
-    lcd_send_cmd(0x06); 
-    lcd_send_cmd(0x01); 
-}
-
-void lcd_clear() {
-    lcd_send_cmd(0x01);
-}
-
-void lcd_display(const char* text) {
-    lcd_clear();
-    while (*text) {
-        lcd_send_data(*text++);
-    }
-}
-
-void lcd_scroll(const char* text, int speed_ms) {
-    int len = strlen(text);
-    char buffer[17] = {0};
-    for (int i = 0; i <= len; i++) {
-        strncpy(buffer, text + i, 16);
-        lcd_display(buffer);
-        vTaskDelay(pdMS_TO_TICKS(speed_ms));
-    }
-}
+void lcd_write_command(uint8_t cmd)
+{
+    lcd_send_byte(cmd, false);

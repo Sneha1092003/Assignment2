@@ -1,0 +1,10 @@
+CMake Error at C:/Users/S.SNEHA/OneDrive/Desktop/esp-idf/tools/cmake/build.cmake:318 (message):
+  Failed to resolve component 'lcd' required by component 'main': unknown
+  name.
+Call Stack (most recent call first):
+  C:/Users/S.SNEHA/OneDrive/Desktop/esp-idf/tools/cmake/build.cmake:361 (__build_resolve_and_add_req)
+  C:/Users/S.SNEHA/OneDrive/Desktop/esp-idf/tools/cmake/build.cmake:665 (__build_expand_requirements)
+  C:/Users/S.SNEHA/OneDrive/Desktop/esp-idf/tools/cmake/project.cmake:717 (idf_build_process)
+  CMakeLists.txt:5 (project)
+
+

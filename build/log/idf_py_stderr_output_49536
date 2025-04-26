@@ -1,0 +1,15 @@
+CMake Error at C:/Users/S.SNEHA/esp/v5.4.1/esp-idf/tools/cmake/build.cmake:610 (message):
+  ERROR: Because no versions of espressif/esp-freertos-coremqtt match
+  >0.0.1,<0.0.2
+
+   and espressif/esp-freertos-coremqtt (0.0.1) depends on idf (^4.3), espressif/esp-freertos-coremqtt (>=0.0.1,<0.0.2) requires idf (^4.3).
+
+  So, because no versions of idf match ^4.3
+
+   and project depends on espressif/esp-freertos-coremqtt (^0.0.1), version solving failed.
+
+Call Stack (most recent call first):
+  C:/Users/S.SNEHA/esp/v5.4.1/esp-idf/tools/cmake/project.cmake:717 (idf_build_process)
+  CMakeLists.txt:5 (project)
+
+

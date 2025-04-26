@@ -1,0 +1,4 @@
+-- ccache will be used for faster recompilation
+-- Building ESP-IDF components for target esp32
+NOTICE: Manifest files have changed, solving dependencies.
+.......-- Configuring incomplete, errors occurred!

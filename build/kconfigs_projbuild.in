@@ -1,13 +1,5 @@
-<<<<<<< HEAD
-source "C:/Espressif/frameworks/esp-idf-v5.4.1-2/components/bootloader/Kconfig.projbuild"
-source "C:/Espressif/frameworks/esp-idf-v5.4.1-2/components/esp_app_format/Kconfig.projbuild"
-source "C:/Espressif/frameworks/esp-idf-v5.4.1-2/components/esp_rom/Kconfig.projbuild"
-source "C:/Espressif/frameworks/esp-idf-v5.4.1-2/components/esptool_py/Kconfig.projbuild"
-source "C:/Espressif/frameworks/esp-idf-v5.4.1-2/components/partition_table/Kconfig.projbuild"
-=======
-source "C:/Espressif/frameworks/esp-idf-v5.4.1/components/bootloader/Kconfig.projbuild"
-source "C:/Espressif/frameworks/esp-idf-v5.4.1/components/esp_app_format/Kconfig.projbuild"
-source "C:/Espressif/frameworks/esp-idf-v5.4.1/components/esp_rom/Kconfig.projbuild"
-source "C:/Espressif/frameworks/esp-idf-v5.4.1/components/esptool_py/Kconfig.projbuild"
-source "C:/Espressif/frameworks/esp-idf-v5.4.1/components/partition_table/Kconfig.projbuild"
->>>>>>> cf23f5418b3c4a1333c2f6ac7956db43f020d348
+source "C:/Users/S.SNEHA/OneDrive/Desktop/esp-idf/components/bootloader/Kconfig.projbuild"
+source "C:/Users/S.SNEHA/OneDrive/Desktop/esp-idf/components/esp_app_format/Kconfig.projbuild"
+source "C:/Users/S.SNEHA/OneDrive/Desktop/esp-idf/components/esp_rom/Kconfig.projbuild"
+source "C:/Users/S.SNEHA/OneDrive/Desktop/esp-idf/components/esptool_py/Kconfig.projbuild"
+source "C:/Users/S.SNEHA/OneDrive/Desktop/esp-idf/components/partition_table/Kconfig.projbuild"
